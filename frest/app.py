@@ -1,12 +1,12 @@
 from flask import Flask
 from auth.routes import api as api_users
 from flask import make_response, jsonify
-from database import db
-from database import config as db_config
-from mail import mail
-from mail import config as mail_config
+from frest.database import db
+from frest.database import config as db_config
+from frest.mail import mail
+from frest.mail import config as mail_config
 from flask_sqlalchemy import SQLAlchemy
-from utils import http_call
+from frest.utils import http_call
 from flask_cors import CORS
 import os
 

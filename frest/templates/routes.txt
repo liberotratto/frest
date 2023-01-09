@@ -3,7 +3,7 @@ from frest.utils import http_call, model_serialize
 from frest.decorators import check_token, admin_required
 from .models import %%NAME%%
 from .forms import %%NAME%%Form
-from database import db
+from frest.database import db
 import json
 from datetime import datetime
 from pytz import timezone

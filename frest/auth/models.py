@@ -1,4 +1,4 @@
-from database import db
+from frest.database import db
 from datetime import datetime
 import string
 import random
