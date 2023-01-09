@@ -1,6 +1,6 @@
 Flask==2.1
 flask_cors==3.0.8
-flask_sqlalchemy==2.3.0
+Flask-SQLAlchemy==2.5.1
 flask-mail==0.9.1
 pytz==2018.5
 argparse==1.1
