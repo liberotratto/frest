@@ -93,6 +93,13 @@ def new_user():
 
     form = UserForm(request.json)
 
+    is_admin = False
+    auth = request.headers.get("Authorization")
+    if auth:
+        token = Token.query.filter_by(string=auth).first()
+        if token.user.is_admin:
+            is_admin = form.get("is_admin")
+
     if not form.get("is_admin") or form.is_valid():
         if User.query.filter_by(email=form.get("email")).first():
             abort(400)
@@ -101,7 +108,7 @@ def new_user():
             email=form.get("email"),
             password=form.get("password"),
             name=form.get("name"),
-            is_admin=False,
+            is_admin=is_admin,
         )
         t = Token(user=u)
         db.session.add(u)
