@@ -153,6 +153,7 @@ def delete_user(userId):
     if not u:
         abort(404)
 
+    Token.query.filter_by(user_id=userId).delete()
     deleted = u.delete()
     db.session.commit()
 
