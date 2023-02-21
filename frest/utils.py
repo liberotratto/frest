@@ -1,8 +1,11 @@
-from flask import make_response, jsonify, request, render_template
-from flask_mail import Message
-from frest.mail import mail
-from datetime import datetime
 import os
+from datetime import datetime
+
+from flask import jsonify, make_response, render_template
+from flask_mail import Message
+
+from frest.auth.models import Token
+from frest.mail import mail
 
 
 def send_email(sender, email, activation_code, title, template):
@@ -48,3 +51,13 @@ def model_serialize(obj, params="", extend_model_for=[]):
                             fields[key] = value
 
     return fields
+
+def author_is_admin(request):
+    """Returns true if the author of the request is an admin."""
+
+    auth = request.headers.get("Authorization")
+    token = Token.query.filter_by(string=auth).first()
+    if token:
+        return token.user.is_admin
+
+    return False

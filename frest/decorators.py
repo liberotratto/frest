@@ -1,6 +1,8 @@
-from flask import request, abort
-from frest.auth.models import Token
 from functools import wraps
+
+from flask import abort, request
+
+from frest.auth.models import Token
 
 
 def check_token(f):

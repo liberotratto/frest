@@ -1,11 +1,14 @@
-from flask import Blueprint, request, abort
-from frest.utils import http_call, model_serialize
-from frest.decorators import check_token, admin_required
-from .models import User, Token
-from .forms import UserForm
-from frest.database import db
 from hashlib import sha256
+
+from flask import Blueprint, abort, request
 from sqlalchemy import desc
+
+from frest.database import db
+from frest.decorators import admin_required, check_token
+from frest.utils import author_is_admin, http_call, model_serialize
+
+from .forms import UserForm
+from .models import Token, User
 
 api = Blueprint("users", __name__)
 
@@ -176,16 +179,17 @@ def edit_user(userId):
     else:
         psw = False
 
-    if not psw or not form.get("is_admin") or form.is_valid():
+    if not psw or form.is_valid():
         u.name = form.get("name")
         u.email = form.get("email")
-        u.is_admin = form.get("is_admin")
+        if author_is_admin(request):
+            u.is_admin = form.get("is_admin")
         if psw:
             crypt_psw = sha256(form.get("password").encode()).hexdigest()
             u.password = crypt_psw
 
         db.session.commit()
 
-        return http_call({"userId": u.userId}, 200)
+        return http_call({"user": u.as_json()}, 200)
 
     abort(400)
